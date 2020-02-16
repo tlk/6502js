@@ -60,8 +60,6 @@ function SimulatorWidget(node) {
     editor.on('keypress input', ui.initialize);
     editor.keydown(ui.captureTabInEditor);
 
-    $(document).keypress(memory.storeKeypress);
-
     simulator.handleMonitorRangeChange();
   }
 
@@ -262,12 +260,6 @@ function SimulatorWidget(node) {
       }
     }
 
-    // Store keycode in ZP $ff
-    function storeKeypress(e) {
-      var value = e.which;
-      memory.storeByte(0xff, value);
-    }
-
     function format(start, length) {
       var html = '';
       var n;
@@ -291,7 +283,6 @@ function SimulatorWidget(node) {
       get: get,
       getWord: getWord,
       storeByte: storeByte,
-      storeKeypress: storeKeypress,
       format: format
     };
   }
