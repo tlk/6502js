@@ -7,9 +7,13 @@
   <body>
 
     <div class="widget">
+      <b>ROM-file</b>
+      <input type="file" id="romFile"/>
+
       <div class="buttons">
         <input type="button" value="Assemble" class="assembleButton" />
         <input type="button" value="Run" class="runButton" />
+        <input type="button" value="Flash ROM-file" class="flashButton" />
         <input type="button" value="Reset" class="resetButton" />
         <input type="button" value="Hexdump" class="hexdumpButton" />
         <input type="button" value="Disassemble" class="disassembleButton" />
@@ -43,26 +47,7 @@
       <div class="messages"><pre><code></code></pre></div>
 
       <div class="notes" style="display: none">Notes:
-
-Memory locations $200 to $5ff map to the screen pixels. Different values will
-draw different colour pixels. The colours are:
-
-$0: Black
-$1: White
-$2: Red
-$3: Cyan
-$4: Purple
-$5: Green
-$6: Blue
-$7: Yellow
-$8: Orange
-$9: Brown
-$a: Light red
-$b: Dark grey
-$c: Grey
-$d: Light green
-$e: Light blue
-$f: Light grey
+TBD
     </div>
 
     <script src="es5-shim.js"></script>

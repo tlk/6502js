@@ -29,6 +29,15 @@ function SimulatorWidget(node) {
     $node.find('.assembleButton').click(function () {
       assembler.assembleCode();
     });
+    $node.find('.flashButton').click(function() {
+      var fr = new FileReader();
+      fr.onload = function(e) {
+        assembler.loadBinary(this.result);
+      };
+
+      var input = $node.find('#romFile')[0];
+      fr.readAsArrayBuffer(input.files[0]);
+    });
     $node.find('.runButton').click(simulator.runBinary);
     $node.find('.runButton').click(simulator.stopDebugger);
     $node.find('.resetButton').click(simulator.reset);
@@ -240,6 +249,13 @@ function SimulatorWidget(node) {
   function Memory() {
     var memArray = new Array(0x800);
 
+    function flash(offset, data) {
+      for (var i = 0; i<data.length; i++) {
+        set(offset + i, data[i]);
+      }
+      return memArray;
+    }
+
     function set(addr, val) {
       return memArray[addr] = val;
     }
@@ -279,6 +295,7 @@ function SimulatorWidget(node) {
     }
 
     return {
+      flash: flash,
       set: set,
       get: get,
       getWord: getWord,
@@ -1936,6 +1953,29 @@ function SimulatorWidget(node) {
       return true;
     }
 
+    // Load binary code into memory
+    function loadBinary(arrayBuffer) {
+      var BOOTSTRAP_ADDRESS = 0x800;
+
+      wasOutOfRangeBranch = false;
+
+      simulator.reset();
+      labels.reset();
+      defaultCodePC = BOOTSTRAP_ADDRESS;
+      $node.find('.messages code').empty();
+
+      message("Flashing memory with data from ROM-file ...");
+
+      var data = new Uint8Array(arrayBuffer);
+      codeLen = data.length;
+      memory.flash(BOOTSTRAP_ADDRESS, data);
+
+      ui.assembleSuccess();
+
+      message("Binary loaded successfully, " + codeLen + " bytes.");
+      return true;
+    }
+
     // Sanitize input: remove comments and trim leading/trailing whitespace
     function sanitize(line) {
       // remove comments
@@ -2609,6 +2649,7 @@ function SimulatorWidget(node) {
     return {
       assembleLine: assembleLine,
       assembleCode: assembleCode,
+      loadBinary: loadBinary,
       getCurrentPC: function () {
         return defaultCodePC;
       },
