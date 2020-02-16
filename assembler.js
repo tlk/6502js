@@ -1563,7 +1563,6 @@ function SimulatorWidget(node) {
     function execute(debugging) {
       if (!codeRunning && !debugging) { return; }
 
-      setRandomByte();
       executeNextInstruction();
 
       if ((regPC === 0) || (!codeRunning && !debugging)) {
@@ -1571,10 +1570,6 @@ function SimulatorWidget(node) {
         message("Program end at PC=$" + addr2hex(regPC - 1));
         ui.stop();
       }
-    }
-
-    function setRandomByte() {
-      memory.set(0xfe, Math.floor(Math.random() * 256));
     }
 
     function updateMonitor() {
